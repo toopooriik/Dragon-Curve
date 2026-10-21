@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,15 +73,16 @@ public class Panel extends JPanel {
         );
         g2d.translate(offsetX, offsetY);
         g2d.scale(zoom, zoom);
-        for (Line line : this.lines) {
-            g2d.setColor(line.color);
-            g2d.setStroke(new BasicStroke(line.width));
-            g2d.drawLine(
-                    line.coordinates.x1,
-                    line.coordinates.y1,
-                    line.coordinates.x2,
-                    line.coordinates.y2
-            );
+        Path2D.Float path = new Path2D.Float();
+
+        int[] firstPathCoordinates = this.path.getFirst();
+
+        path.moveTo(firstPathCoordinates[0], firstPathCoordinates[1]);
+        for (int[] pathCoordinates : this.path) {
+            path.lineTo(pathCoordinates[0], pathCoordinates[1]);
         }
+        g2d.setColor(Color.WHITE);
+        g2d.setStroke(new BasicStroke(1.5f));
+        g2d.draw(path);
     }
 }

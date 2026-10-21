@@ -6,6 +6,7 @@ import vector.panel.jpanel.paincomponents.linecomponents.LineCoordinates;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DragonCurve {
@@ -21,42 +22,33 @@ public class DragonCurve {
 
     public void paint() {
         this.paintFirstLine();
-        int iterations = 10;
-        for (int j = 0; j < iterations  ; j++) {
-            List<Line> currentLines = new ArrayList<>(this.panel.lines);
-            Line lastLine = currentLines.getLast();
-            int cx = lastLine.coordinates.x2;
-            int cy = lastLine.coordinates.y2;
-            for(int i = currentLines.size() - 1; i >= 0; i--){
-                Line line = currentLines.get(i);
+        int iterations = 23;
+        for (int j = 0; j < iterations; j++) {
+            List<int[]> currentPath = new ArrayList<>(this.panel.path);
+            int[] lastPath = currentPath.getLast();
+            int cx = lastPath[0];
+            int cy = lastPath[1];
+            for(int i = currentPath.size() - 1; i >= 0; i--){
+                int[] line = currentPath.get(i);
 
-                int x1 = line.coordinates.x2;
-                int y1 = line.coordinates.y2;
-                int x2 = line.coordinates.x1;
-                int y2 = line.coordinates.y1;
+                int x2 = line[0];
+                int y2 = line[1];
 
-                int newX1 = cx - (y1 - cy);
-                int newY1 = cy + (x1 - cx);
                 int newX2 = cx - (y2 - cy);
                 int newY2 = cy + (x2 - cx);
 
-                this.panel.addLine(
-                        new LineCoordinates(newX1, newY1, newX2, newY2),
-                        this.colorLine,
-                        this.widthLine
-                );
+                this.panel.addPath(new int[]{newX2, newY2});
             }
         }
+        this.panel.repaint();
     }
 
     public void paintFirstLine() {
         int x = (int) (Math.random() * Panel.dimension.width) + 1;
         int y = (int) (Math.random() * Panel.dimension.height) + 1;
         int lineLength = (int) (Math.random() * this.lineLengthRange) + 15;
-        this.panel.addLine(
-                new LineCoordinates(x, y, x+lineLength, y+lineLength),
-                this.colorLine,
-                this.widthLine
-        );
+        this.panel.addPath(new int[]{x, y});
+        this.panel.addPath(new int[]{x+lineLength, y+lineLength});
+
     }
 }
