@@ -1,6 +1,5 @@
 package vector.panel.jframe;
 
-import vector.panel.drawing.dragoncurve.DragonCurve;
 import vector.panel.jpanel.Panel;
 
 import javax.swing.*;
@@ -17,8 +16,6 @@ public class Frame {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Тест");
             this.start(frame);
-            DragonCurve dragonCurve = new DragonCurve(this.panel);
-            dragonCurve.paint();
 
         });
     }

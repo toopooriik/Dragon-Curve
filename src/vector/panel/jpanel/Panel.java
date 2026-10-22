@@ -1,21 +1,16 @@
 package vector.panel.jpanel;
 
-import vector.panel.jpanel.paincomponents.linecomponents.Line;
-import vector.panel.jpanel.paincomponents.linecomponents.LineCoordinates;
+import vector.panel.drawing.dragoncurve.DragonCurve;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Panel extends JPanel {
-    public final List<Line> lines = new ArrayList<>();
-    public final List<int[]> path = new ArrayList<>();
+    private final DragonCurve dragonCurve = new DragonCurve();
 
     private double zoom = 1.0;
     private double offsetX = 0;
@@ -56,14 +51,6 @@ public class Panel extends JPanel {
         });
 
     }
-
-    public void addLine(LineCoordinates coordinates, Color color, float widthLine) {
-        this.lines.add(new Line(coordinates, color, widthLine));
-        this.repaint();
-    }
-    public void addPath(int[] coordinates) {
-        this.path.add(coordinates);
-    }
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -74,15 +61,10 @@ public class Panel extends JPanel {
         g2d.translate(offsetX, offsetY);
         g2d.scale(zoom, zoom);
         Path2D.Float path = new Path2D.Float();
+        this.dragonCurve.addPoint(path);
 
-        int[] firstPathCoordinates = this.path.getFirst();
-
-        path.moveTo(firstPathCoordinates[0], firstPathCoordinates[1]);
-        for (int[] pathCoordinates : this.path) {
-            path.lineTo(pathCoordinates[0], pathCoordinates[1]);
-        }
         g2d.setColor(Color.WHITE);
-        g2d.setStroke(new BasicStroke(1.5f));
+        g2d.setStroke(new BasicStroke(0.000000000000000005f));
         g2d.draw(path);
     }
 }
